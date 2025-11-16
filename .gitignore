@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg
+*.egg-info/
+*.manifest
+*.spec
+
+# Virtual environments
+venv/
+env/
+.env/
+.env.*  # если есть несколько env файлов, например .env.local
+
+# Logs
+logs/
+*.log
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# MacOS
+.DS_Store
+
+# Distribution / packaging
+build/
+dist/
+*.tar.gz
+*.whl
+*.egg-info
+
+# MyPy
+.mypy_cache/
+
+# Pytest
+.cache/
+.pytest_cache/
+.coverage
+
+# Docker
+*.dockerignore
+*.pid
+*.swp
+*.swo
+*.bak
