@@ -1,28 +1,20 @@
 #app/services/file_processing.py
 
-import os
 import uuid
 from app.models.events import UploadEvent, EmbeddingEvent
-from app.core.logger import logger
 from app.core.config import settings
-from app.producers.embeddings import publish_embeddings
+from app.services.file_reader import load_text_from_file
 
-async def process_uploaded_file(rabbit, upload_event: UploadEvent):
+async def process_uploaded_file(upload_event: UploadEvent):
+    "Process file to create embedding event."
     file_url = upload_event.file_url
     file_id = upload_event.file_id
     user_id = upload_event.user_id
 
-    if not os.path.exists(file_url):
-        logger.error("File not found.")
-        return
-    
-    text = ""
-    with open(file_url, "r") as f:
-        text = f.read()
+    text = load_text_from_file(file_url)
 
     if not text.strip():
-        logger.warning("File is empty.")
-        return
+        return None
 
     text_chunks = []
     for i in range(0, len(text), settings.chunk_size):
@@ -42,4 +34,4 @@ async def process_uploaded_file(rabbit, upload_event: UploadEvent):
         user_id=user_id
     )
 
-    await publish_embeddings(rabbit, embedding_event)
+    return embedding_event

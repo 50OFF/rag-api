@@ -49,3 +49,5 @@ dist/
 *.swp
 *.swo
 *.bak
+
+uploads/

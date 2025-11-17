@@ -1,16 +1,16 @@
-from openai import OpenAI
+#app/services/embedder.py
+
+from openai import AsyncOpenAI
 from app.core.config import settings
 
 class Embedder:
     def __init__(self):
-        self.client = OpenAI(api_key=settings.openai_api_key)
+        self.client = AsyncOpenAI(api_key=settings.openai_api_key)
         self.model = settings.openai_embeddings_model
 
-    def generate(self, text: str) -> list[float]:
-        """
-        Генерирует векторное представление текста
-        """
-        response = self.client.embeddings.create(
+    async def generate_embedding(self, text: str) -> list[float]:
+        "Create embedding for specified text."
+        response = await self.client.embeddings.create(
             model=self.model,
             input=text
         )

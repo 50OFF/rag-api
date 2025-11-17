@@ -20,7 +20,7 @@ ch = logging.StreamHandler(sys.stdout)
 ch.setLevel(getattr(logging, settings.console_log_level.upper(), logging.INFO))
 ch.setFormatter(formatter)
 
-if settings.logs_path != "not defined":
+if settings.logs_path is not None:
     fh = TimedRotatingFileHandler(
         filename=LOG_FILE,
         when="midnight",
@@ -33,5 +33,5 @@ if settings.logs_path != "not defined":
 
 if not logger.handlers:
     logger.addHandler(ch)
-    if settings.logs_path != "not defined":
+    if settings.logs_path is not None:
         logger.addHandler(fh)

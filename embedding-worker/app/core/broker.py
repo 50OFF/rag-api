@@ -1,18 +1,35 @@
-#app/core/rabbitmq.py
+#app/core/broker.py
 
 import json
 import asyncio
 import aio_pika
 from aio_pika import Message
 from app.core.logger import logger
+from abc import ABC, abstractmethod
 
-class RabbitMQClient:
+
+class Broker(ABC):
+    @abstractmethod
+    async def connect(self):
+        ...
+
+    @abstractmethod
+    async def produce(self, queue_name: str, message: dict):
+        ...
+
+    @abstractmethod
+    async def consume(self, queue_name: str, message_callback):
+        ...
+
+
+class RabbitMQClient(Broker):
     def __init__(self, rabbitmq_url: str):
         self.rabbitmq_url = rabbitmq_url
         self.connection = None
         self.channel = None
     
     async def connect(self):
+        "Connect to RabbitMQ."
         if self.connection is not None:
             await self.connection.close()
             self.channel = None
@@ -21,6 +38,7 @@ class RabbitMQClient:
         self.channel = await self.connection.channel()
 
     async def produce(self, queue_name: str = None, message: dict = None):
+        "Publish message in queue."
         if queue_name is None:
             logger.warning("Queue is not defined to produce message.")
             return
@@ -37,6 +55,7 @@ class RabbitMQClient:
         )
     
     async def consume(self, queue_name: str = None, message_callback = None):
+        "Consume messages from queue."
         if queue_name is None:
             logger.warning("Queue is not defined to consume.")
             return
