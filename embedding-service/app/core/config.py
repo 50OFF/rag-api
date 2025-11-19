@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     postgres_password: str = "postgres"
     postgres_db: str = "rag"
 
-    logs_path: str = None
+    logs_path: str | None = None
     file_log_level: str = "DEBUG"
     console_log_level: str = "INFO"
 

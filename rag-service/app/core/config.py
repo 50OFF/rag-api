@@ -1,3 +1,5 @@
+#app/core/config.property
+ 
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
@@ -5,13 +7,21 @@ class Settings(BaseSettings):
     rabbitmq_password: str = "password"
     rabbitmq_host: str = "rabbitmq"
     rabbitmq_port: int = 5672
-    upload_queue: str = "upload_queue"
-    embedding_queue: str = "embedding_queue"
-    chunk_size: int = 2000
+    rag_queue: str = "rag_queue"
+    llm_queue: str = "llm_queue"
+
+    postgres_host: str = "localhost"
+    postgres_port: int = 5432
+    postgres_user: str = "postgres"
+    postgres_password: str = "postgres"
+    postgres_db: str = "rag"
 
     logs_path: str | None = None
     file_log_level: str = "DEBUG"
     console_log_level: str = "INFO"
+
+    openai_api_key: str
+    openai_embeddings_model: str = "text-embedding-3-small"
 
     @property
     def rabbitmq_url(self) -> str:

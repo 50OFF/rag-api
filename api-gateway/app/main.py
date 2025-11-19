@@ -1,11 +1,38 @@
 from fastapi import FastAPI, UploadFile, File
-from app.services.rabbitmq_client import RabbitMQClient
+from pydantic import BaseModel
+from contextlib import asynccontextmanager
+from app.core.broker import RabbitMQClient
 from app.core.config import settings
 import uuid
 import os
 
-app = FastAPI()
-rabbitmq_client = RabbitMQClient(settings.rabbitmq_url)
+rabbit = RabbitMQClient(settings.rabbitmq_url)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # ---------- Startup ----------
+    # logger.info("Starting API service...")
+
+    os.makedirs(settings.uploads_path, exist_ok=True)
+    # logger.info(f"Uploads directory ensured: {settings.uploads_path}")
+
+    # logger.info("Connecting to RabbitMQ...")
+    await rabbit.connect()
+    # logger.info("RabbitMQ connected.")
+
+    yield  # <-- Application runs here
+
+    # ---------- Shutdown ----------
+    # logger.info("Shutting down API service...")
+    if rabbit.connection:
+        await rabbit.connection.close()
+        # logger.info("RabbitMQ connection closed.")
+
+app = FastAPI(lifespan=lifespan)
+
+class RagRequest(BaseModel):
+    question: str
+    top_k: int
 
 @app.get("/health")
 async def check_health():
@@ -25,17 +52,19 @@ async def upload(file: UploadFile = File(...)):
     with open(file_url, "wb") as f:
         f.write(await file.read())
 
-    await rabbitmq_client.publish_message(settings.upload_queue, {"file_id": file_id,
-                                                                  "user_id": '123',
-                                                                  "file_url": file_url})
+    await rabbit.produce(settings.upload_queue, {"file_id": file_id,
+                                                "user_id": '123',
+                                                "file_url": file_url})
     return {"message": "upload"}
 
-@app.post("/rag")
-async def rag():
-    await rabbitmq_client.publish_message(settings.rag_queue, {"message": "rag"})
+@app.post("/rag/query")
+async def rag(req: RagRequest):
+    await rabbit.produce(settings.rag_queue, {"question": req.question,
+                                              "top_k": req.top_k,
+                                              "user_id": '123'})
     return {"message": "rag"}
 
 @app.get("/llm")
 async def llm():
-    await rabbitmq_client.publish_message(settings.llm_queue, {"message": "llm"})
+    await rabbit.produce(settings.llm_queue, {"message": "llm"})
     return {"message": "llm"}
