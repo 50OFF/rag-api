@@ -48,13 +48,14 @@ async def upload(file: UploadFile = File(...)):
 
     os.makedirs(settings.uploads_path, exist_ok=True)
     file_url = settings.uploads_path + f"/{file_id}_{file.filename}"
+    file_name = f"{file_id}_{file.filename}"
 
     with open(file_url, "wb") as f:
         f.write(await file.read())
 
     await rabbit.produce(settings.upload_queue, {"file_id": file_id,
                                                 "user_id": '123',
-                                                "file_url": file_url})
+                                                "file_name": file_name})
     return {"message": "upload"}
 
 @app.post("/rag/query")

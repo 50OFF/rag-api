@@ -7,11 +7,11 @@ from app.services.file_reader import load_text_from_file
 
 async def process_uploaded_file(upload_event: UploadEvent):
     "Process file to create embedding event."
-    file_url = upload_event.file_url
+    file_name = upload_event.file_name
     file_id = upload_event.file_id
     user_id = upload_event.user_id
 
-    text = load_text_from_file(file_url)
+    text = load_text_from_file(file_name)
 
     if not text.strip():
         return None

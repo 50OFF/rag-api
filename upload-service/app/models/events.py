@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 class UploadEvent(BaseModel):
     file_id: str
-    file_url: str
+    file_name: str
     user_id: str
 
 class EmbeddingEvent(BaseModel):

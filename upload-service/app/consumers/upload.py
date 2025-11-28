@@ -10,16 +10,20 @@ from app.core.logger import logger
 
 async def handle(broker: Broker, message: IncomingMessage):
     "Handle incoming message about uploading file."
+    logger.info("Recieved UPLOAD message.")
     try:
         async with message.process():
             data = json.loads(message.body.decode())
             upload_event = UploadEvent(**data)
 
+            logger.info(f"Processing file {upload_event.file_name}...")
+
             embedding_event: EmbeddingEvent | None = await process_uploaded_file(upload_event)
 
             if embedding_event:
                 await publish_embeddings(broker, embedding_event)
+                logger.info(f"Sent EMBEDDINGS message for file {upload_event.file_name}.")
     
     except Exception as e:
-        logger.exception(f"Error in message callback: {e}")
+        logger.error(f"Error in processing incoming message: {e}")
         await message.nack()

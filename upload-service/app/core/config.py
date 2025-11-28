@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     embedding_queue: str = "embedding_queue"
     chunk_size: int = 2000
 
+    files_path: str = "/app/uploads/"
     logs_path: str | None = None
     file_log_level: str = "DEBUG"
     console_log_level: str = "INFO"
@@ -18,7 +19,7 @@ class Settings(BaseSettings):
         return F"amqp://{self.rabbitmq_user}:{self.rabbitmq_password}@{self.rabbitmq_host}:{self.rabbitmq_port}/"
 
     class Config:
-        env_file = "app/.env"
+        env_file = ".env"
         env_file_encoding = "utf-8"
 
 

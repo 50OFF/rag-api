@@ -1,9 +1,12 @@
+#app/services/file_reader.py
+
 import os
 import chardet
 from pypdf import PdfReader
 from bs4 import BeautifulSoup
 from docx import Document
 import pypandoc
+from app.core.config import settings
 
 def read_text_file(path: str) -> str:
     """Try to read file in different encoding."""
@@ -40,8 +43,9 @@ def read_rtf(path: str) -> str:
         to="plain", format="rtf"
     )
 
-def load_text_from_file(path: str) -> str:
+def load_text_from_file(file_name: str) -> str:
     "Detects file extension, reads it and returns text."
+    path = settings.files_path+file_name
     if not os.path.exists(path):
         raise FileNotFoundError(f"File not found: {path}")
     

@@ -14,7 +14,9 @@ __pycache__/
 venv/
 env/
 .env/
-.env.*  # если есть несколько env файлов, например .env.local
+.env
+*.env
+.env.*
 
 # Logs
 logs/
@@ -49,5 +51,6 @@ dist/
 *.swp
 *.swo
 *.bak
+*docker-compose.yml
 
 uploads/
