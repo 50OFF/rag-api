@@ -1,17 +1,16 @@
-#app/core/logger.py
-
 import logging
 import sys
 from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 from app.core.config import settings
 
-logs_dir = Path(settings.logs_path)
-logs_dir.mkdir(parents=True, exist_ok=True)
+if settings.logs_path is not None:
+    logs_dir = Path(settings.logs_path)
+    logs_dir.mkdir(parents=True, exist_ok=True)
 
-LOG_FILE = logs_dir / "upload_service.log"
+    LOG_FILE = logs_dir / "rag_service.log"
 
-logger = logging.getLogger("upload_service_logger")
+logger = logging.getLogger("rag_service_logger")
 logger.setLevel(logging.DEBUG)
 
 formatter = logging.Formatter(
