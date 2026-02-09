@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     file_log_level: str = "DEBUG"
     console_log_level: str = "INFO"
 
-    openai_api_key: str
+    openai_api_key: str | None = None
     openai_embeddings_model: str = "text-embedding-3-small"
 
     @property

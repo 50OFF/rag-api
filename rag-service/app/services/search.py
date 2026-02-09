@@ -1,10 +1,11 @@
-#app/services/chunks_search.py
+#app/services/search.py
 
 from app.services.embedder import Embedder
 from app.services.db import DataBase
 from app.models.events import RagEvent
 
-async def rag_search(embedder: Embedder, db: DataBase, event: RagEvent):
+async def rag_search(embedder: Embedder, db: DataBase, event: RagEvent) -> list[dict] | None:
+    "Vector search."
     question = event.question
     user_id = event.user_id
     top_k = event.top_k
@@ -23,12 +24,16 @@ async def rag_search(embedder: Embedder, db: DataBase, event: RagEvent):
         user_id,
         top_k
     )
-
-    return [
-        {
-            "id": str(r["chunk_id"]),
-            "text": r["text"],
-            "score": float(r["score"])
-        }
-        for r in rows
-    ]
+    
+    if rows is not None:
+        return [
+            {
+                "id": str(r["chunk_id"]),
+                "text": r["text"],
+                "score": float(r["score"])
+            }
+            for r in rows
+        ]
+    else:
+        return None
+    
