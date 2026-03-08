@@ -3,8 +3,9 @@
 from app.services.embedder import Embedder
 from app.services.db import DataBase
 from app.models.events import RagEvent
+from app.models.chunks import Chunk
 
-async def rag_search(embedder: Embedder, db: DataBase, event: RagEvent) -> list[dict] | None:
+async def rag_search(embedder: Embedder, db: DataBase, event: RagEvent) -> list[Chunk] | None:
     "Vector search."
     question = event.question
     user_id = event.user_id
@@ -26,14 +27,16 @@ async def rag_search(embedder: Embedder, db: DataBase, event: RagEvent) -> list[
     )
     
     if rows is not None:
-        return [
-            {
-                "id": str(r["chunk_id"]),
-                "text": r["text"],
-                "score": float(r["score"])
+        chunks = []
+        for row in rows:
+            chunk_dict = {
+                "id": str(row["chunk_id"]),
+                "text": row["text"],
+                "score": float(row["score"])
             }
-            for r in rows
-        ]
+            chunk = Chunk(**chunk_dict)
+            chunks.append(chunk)
+        return chunks
     else:
         return None
     

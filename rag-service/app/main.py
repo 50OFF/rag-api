@@ -3,12 +3,14 @@
 import asyncio
 from app.core.broker import RabbitMQClient
 from app.core.config import settings
+from app.core.logger import logger
 from app.services.db import DataBase
 from app.services.embedder import Embedder
 from app.consumers import rag
 import signal
 
 async def main():
+    logger.info("RAG service started.")
     embedder = Embedder()
 
     db = DataBase(settings.postgres_host,

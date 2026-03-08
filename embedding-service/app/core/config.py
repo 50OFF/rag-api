@@ -28,7 +28,7 @@ class Settings(BaseSettings):
 
 
     class Config():
-        env_file = "app/.env"
+        env_file = ".env"
         env_file_encodings = "utf-8"
 
 

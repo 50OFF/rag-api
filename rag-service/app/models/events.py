@@ -1,6 +1,7 @@
 #app/models/events.py
 
 from pydantic import BaseModel
+from .chunks import Chunk
 
 
 class RagEvent(BaseModel):
@@ -11,4 +12,5 @@ class RagEvent(BaseModel):
 
 class LlmEvent(BaseModel):
     question: str
-    chunks: list[dict]
+    chunks: list[Chunk]
+    
