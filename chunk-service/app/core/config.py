@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     rabbitmq_host: str = "rabbitmq"
     rabbitmq_port: int = 5672
     upload_queue: str = "upload_queue"
-    embedding_queue: str = "embedding_queue"
+    chunks_queue: str = "chunks_queue"
     chunk_size: int = 2000
 
     files_path: str = "/app/uploads/"

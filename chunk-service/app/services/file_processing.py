@@ -2,6 +2,7 @@
 
 import uuid
 from app.models.events import FileUploadedEvent, FileChunkedEvent
+from app.models.chunks import Chunk
 from app.core.config import settings
 from app.services.file_reader import load_text_from_file
 
@@ -21,12 +22,16 @@ async def process_uploaded_file(file_uploaded_event: FileUploadedEvent):
         chunk_text = text[i : i + settings.chunk_size]
         chunk_id = str(uuid.uuid4())
 
-        text_chunks.append({
+        chunk_dict = {
             "chunk_id": chunk_id,
             "file_id": file_id,
             "user_id": user_id,
             "text": chunk_text
-        })
+        }
+
+        chunk = Chunk(**chunk_dict)
+
+        text_chunks.append(chunk)
 
     file_chunked_event = FileChunkedEvent(
         file_id=file_id,

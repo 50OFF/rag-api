@@ -1,6 +1,7 @@
 #app/models/events.py
 
 from pydantic import BaseModel
+from .chunks import Chunk
 
 class FileUploadedEvent(BaseModel):
     file_id: str
@@ -9,5 +10,5 @@ class FileUploadedEvent(BaseModel):
 
 class FileChunkedEvent(BaseModel):
     file_id: str
-    text_chunks: list[dict]
+    text_chunks: list[Chunk]
     user_id: str

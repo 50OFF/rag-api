@@ -8,16 +8,18 @@ from app.core.logger import logger
 
 async def handle(embedder: Embedder, db: DataBase, message: IncomingMessage):
     "Handle imcoming message about creating embeddings."
+    logger.info("Recieved file chunked event.")
     try:
         async with message.process():
             data = json.loads(message.body.decode())
+            file_chunked_event = FileChunkedEvent(**data)
 
-            chunk_id = data["chunk_id"]
-            file_id = data["file_id"]
-            user_id = data["user_id"]
-            text = data["text"]
+            # chunk_id = data["chunk_id"]
+            # file_id = data["file_id"]
+            # user_id = data["user_id"]
+            # text = data["text"]
 
-            logger.debug(f"Got chunk {chunk_id}")
+            # logger.debug(f"Got chunk {chunk_id}")
 
             embedding = await embedder.generate_embedding(text)
 

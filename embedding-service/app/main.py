@@ -20,7 +20,7 @@ async def main():
     rabbit = RabbitMQClient(settings.rabbitmq_url)
     await rabbit.connect()
     
-    await rabbit.consume(settings.embedding_queue, lambda msg: embedding.handle(embedder, db, msg))
+    await rabbit.consume(settings.chunks_queue, lambda msg: embedding.handle(embedder, db, msg))
 
 
 if __name__ == "__main__":

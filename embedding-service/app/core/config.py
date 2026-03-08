@@ -5,7 +5,7 @@ class Settings(BaseSettings):
     rabbitmq_password: str = "password"
     rabbitmq_host: str = "rabbitmq"
     rabbitmq_port: int = 5672
-    embedding_queue: str = "embedding_queue"
+    chunks_queue: str = "chunks_queue"
 
     postgres_host: str = "postgres"
     postgres_port: int = 5432

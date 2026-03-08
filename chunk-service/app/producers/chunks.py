@@ -7,4 +7,4 @@ from app.core.broker import Broker
 async def publish_file_chunked_event(broker: Broker, event: FileChunkedEvent):
     "Send message with file chunks."
     for chunk in event.text_chunks:
-        await broker.produce(settings.embedding_queue, chunk)
+        await broker.produce(settings.chunks_queue, chunk.model_dump())
