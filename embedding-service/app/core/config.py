@@ -7,10 +7,10 @@ class Settings(BaseSettings):
     rabbitmq_port: int = 5672
     embedding_queue: str = "embedding_queue"
 
-    postgres_host: str = "localhost"
+    postgres_host: str = "postgres"
     postgres_port: int = 5432
-    postgres_user: str = "postgres"
-    postgres_password: str = "postgres"
+    postgres_user: str = "user"
+    postgres_password: str = "password"
     postgres_db: str = "rag"
 
     logs_path: str | None = None

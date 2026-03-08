@@ -1,0 +1,6 @@
+aio_pika==9.6.1
+asyncpg==0.31.0
+openai==2.26.0
+pgvector==0.4.2
+pydantic==2.12.5
+pydantic_settings==2.13.1

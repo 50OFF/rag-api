@@ -10,10 +10,10 @@ class Settings(BaseSettings):
     rag_queue: str = "rag_queue"
     llm_queue: str = "llm_queue"
 
-    postgres_host: str = "localhost"
+    postgres_host: str = "postgres"
     postgres_port: int = 5432
-    postgres_user: str = "postgres"
-    postgres_password: str = "postgres"
+    postgres_user: str = "user"
+    postgres_password: str = "password"
     postgres_db: str = "rag"
 
     logs_path: str | None = None
@@ -28,7 +28,7 @@ class Settings(BaseSettings):
         return F"amqp://{self.rabbitmq_user}:{self.rabbitmq_password}@{self.rabbitmq_host}:{self.rabbitmq_port}/"
 
     class Config:
-        env_file = "app/.env"
+        env_file = ".env"
         env_file_encoding = "utf-8"
 
 
