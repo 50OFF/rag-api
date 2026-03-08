@@ -54,8 +54,8 @@ async def upload(file: UploadFile = File(...)):
         f.write(await file.read())
 
     await rabbit.produce(settings.upload_queue, {"file_id": file_id,
-                                                "user_id": '123',
-                                                "file_name": file_name})
+                                                "file_name": file_name,
+                                                "user_id": '123'})
     return {"message": "upload"}
 
 @app.post("/rag/query")

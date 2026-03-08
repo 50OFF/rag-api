@@ -1,15 +1,15 @@
 #app/services/file_processing.py
 
 import uuid
-from app.models.events import UploadEvent, EmbeddingEvent
+from app.models.events import FileUploadedEvent, FileChunkedEvent
 from app.core.config import settings
 from app.services.file_reader import load_text_from_file
 
-async def process_uploaded_file(upload_event: UploadEvent):
+async def process_uploaded_file(file_uploaded_event: FileUploadedEvent):
     "Process file to create embedding event."
-    file_name = upload_event.file_name
-    file_id = upload_event.file_id
-    user_id = upload_event.user_id
+    file_name = file_uploaded_event.file_name
+    file_id = file_uploaded_event.file_id
+    user_id = file_uploaded_event.user_id
 
     text = load_text_from_file(file_name)
 
@@ -28,10 +28,10 @@ async def process_uploaded_file(upload_event: UploadEvent):
             "text": chunk_text
         })
 
-    embedding_event = EmbeddingEvent(
+    file_chunked_event = FileChunkedEvent(
         file_id=file_id,
         text_chunks=text_chunks,
         user_id=user_id
     )
 
-    return embedding_event
+    return file_chunked_event

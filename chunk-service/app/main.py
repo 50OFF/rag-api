@@ -7,7 +7,7 @@ from app.consumers import upload
 from app.core.logger import logger
 
 async def main():
-    logger.info("Upload service started.")
+    logger.info("Chunk service started.")
     rabbit = RabbitMQClient(settings.rabbitmq_url)
     await rabbit.connect()
 

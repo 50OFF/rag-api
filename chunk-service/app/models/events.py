@@ -2,12 +2,12 @@
 
 from pydantic import BaseModel
 
-class UploadEvent(BaseModel):
+class FileUploadedEvent(BaseModel):
     file_id: str
     file_name: str
     user_id: str
 
-class EmbeddingEvent(BaseModel):
+class FileChunkedEvent(BaseModel):
     file_id: str
     text_chunks: list[dict]
     user_id: str
